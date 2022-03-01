@@ -42,12 +42,15 @@ public class JpqlMain {
             em.flush();
             em.clear();
 
-            String query = "select m from Member m join fetch m.team";
+            String query = "select distinct t from Team t join fetch t.members";
 
-            List<Member> members = em.createQuery(query, Member.class).getResultList();
+            List<Team> members = em.createQuery(query, Team.class).getResultList();
 
-            for (Member member : members) {
-                System.out.println("=========== Member Name : " + member.getUserName() + ", " + member.getTeam().getName() + "==============");
+            for (Team team : members) {
+                System.out.println("team = " + team.getName() + " | Member Size : " + team.getMembers().size());
+                for (Member member : team.getMembers()) {
+                    System.out.println("--> Member = " + member.getUserName());
+                }
             }
 
             tx.commit();
