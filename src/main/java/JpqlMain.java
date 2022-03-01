@@ -1,6 +1,8 @@
 import jpql.Member;
+import jpql.Team;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 public class JpqlMain {
@@ -14,21 +16,24 @@ public class JpqlMain {
         tx.begin();
 
         try {
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
+
             Member member = new Member();
             member.setUserName("hancoding");
-            member.setAge(28);
+            member.setTeam(team);
             em.persist(member);
 
-            String query = "select " +
-                    "case when m.age <= 10 then '학생 요금' " +
-                    "when m.age >= 60 then '경로요금' " +
-                    "else '일반요금' end " +
-                    "from Member m";
-            List<String> resultList = em.createQuery(query, String.class).getResultList();
+            em.flush();
+            em.clear();
 
-            for (String s : resultList) {
-                System.out.println("=========" + s + "============");
-            }
+            String query = "select m.userName from Team t join t.members m";
+
+            Integer memberSize = em.createQuery(query, Integer.class).getSingleResult();
+
+            System.out.println("===========" + memberSize);
+
             tx.commit();
         }catch (Exception e) {
             tx.rollback();

@@ -38,4 +38,16 @@ public class Member {
     public void setAge(int age) {
         this.age = age;
     }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        if(this.team != null) {
+            team.getMembers().remove(this);
+        }
+        this.team = team;
+        team.getMembers().add(this);
+    }
 }
