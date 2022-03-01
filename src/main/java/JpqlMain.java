@@ -16,23 +16,39 @@ public class JpqlMain {
         tx.begin();
 
         try {
-            Team team = new Team();
-            team.setName("TeamA");
-            em.persist(team);
+            Team teamA = new Team();
+            teamA.setName("TeamA");
+            em.persist(teamA);
 
-            Member member = new Member();
-            member.setUserName("hancoding");
-            member.setTeam(team);
-            em.persist(member);
+            Team teamB = new Team();
+            teamB.setName("TeamB");
+            em.persist(teamB);
+
+            Member memberA = new Member();
+            memberA.setUserName("MemberA");
+            memberA.setTeam(teamA);
+            em.persist(memberA);
+
+            Member memberB = new Member();
+            memberB.setUserName("MemberB");
+            memberB.setTeam(teamA);
+            em.persist(memberB);
+
+            Member memberC = new Member();
+            memberC.setUserName("MemberC");
+            memberC.setTeam(teamB);
+            em.persist(memberC);
 
             em.flush();
             em.clear();
 
-            String query = "select m.userName from Team t join t.members m";
+            String query = "select m from Member m join fetch m.team";
 
-            Integer memberSize = em.createQuery(query, Integer.class).getSingleResult();
+            List<Member> members = em.createQuery(query, Member.class).getResultList();
 
-            System.out.println("===========" + memberSize);
+            for (Member member : members) {
+                System.out.println("=========== Member Name : " + member.getUserName() + ", " + member.getTeam().getName() + "==============");
+            }
 
             tx.commit();
         }catch (Exception e) {
