@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 @NamedQuery(
         name = "Member.findByUserName",
-        query = "select m from Member m where m.userName =: userName"
+        query = "select m from Member m where m.userName =: userName" // @NameQuery 선언 방법
 )
 public class Member {
 

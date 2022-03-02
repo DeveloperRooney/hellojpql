@@ -42,6 +42,7 @@ public class JpqlMain {
             em.flush();
             em.clear();
 
+            // @NamedQuery 사용 예시
             Member findMember = em.createNamedQuery("Member.findByUserName", Member.class)
                     .setParameter("userName", "MemberA")
                     .getSingleResult();
