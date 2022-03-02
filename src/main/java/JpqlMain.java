@@ -42,12 +42,11 @@ public class JpqlMain {
             em.flush();
             em.clear();
 
-            // @NamedQuery 사용 예시
-            Member findMember = em.createNamedQuery("Member.findByUserName", Member.class)
-                    .setParameter("userName", "MemberA")
-                    .getSingleResult();
+            // 벌크 연산
+            int resultConut = em.createQuery("update Member m set m.age = 20")
+                            .executeUpdate();
 
-            System.out.println("======" + findMember.getUserName() + "=======");
+            System.out.println("========== count : " + resultConut);
 
             tx.commit();
         }catch (Exception e) {
