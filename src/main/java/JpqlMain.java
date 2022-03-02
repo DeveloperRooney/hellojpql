@@ -42,13 +42,11 @@ public class JpqlMain {
             em.flush();
             em.clear();
 
-            String query = "select m from Member m where m.team = :team";
-
-            Member findMember = em.createQuery(query, Member.class)
-                    .setParameter("team", teamB)
+            Member findMember = em.createNamedQuery("Member.findByUserName", Member.class)
+                    .setParameter("userName", "MemberA")
                     .getSingleResult();
 
-            System.out.println("Member Name : " + findMember.getUserName());
+            System.out.println("======" + findMember.getUserName() + "=======");
 
             tx.commit();
         }catch (Exception e) {
